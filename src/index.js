@@ -23,21 +23,26 @@ class Node {
         this.position = [col, row]
         this.col = col
         this.row = row
-        // this.listOfMoves = listMoves(col, row)
 
-    this.uur = null
-    this.urr = null
-    this.drr = null
-    this.ddr = null
-    this.ddl = null
-    this.dll = null
-    this.ull = null
-    this.uul = null
+        this.uur = null
+        this.urr = null
+        this.drr = null
+        this.ddr = null
+        this.ddl = null
+        this.dll = null
+        this.ull = null
+        this.uul = null
 
         // do i need to create 8 potential children?
 
         return this.position
+    }
+}
 
+class moveGenerator {
+    constructor() {
+        //create function to generate moves
+        // this.startingPosition = 
     }
 }
 
@@ -45,23 +50,33 @@ const root = new Node(2,2)
 
 console.log(root)
 
-function createGraph(node = root) {
+const startingPosition = [2,2]
+
+//position is an array of coordinates
+function createGraph(position = startingPosition) {
+    // how can i get reference to the very first root
+
     // base case; if out of bounds, then return?
+
 
     // like 
     if (node.col < 0 || node.col > 7 || node.row < 0 || node.row > 7) return null
 
+    // const newNode = Node()
+    // what do i do here
     // do i need a queue?
 
     // create 8 recursions
-    node.uur = createGraph(col+2 < 8 || row+1 < 8)
-    node.urr = createGraph(col+1 < 8 || row+2 < 8)
-    node.drr = createGraph(col-1 < 8 || row+2 > 0)
-    node.ddr = createGraph(col-1 < 8 || row+1 > 0)
-    node.ddl = createGraph(col-2 > 0 || row-1 > 0)
-    node.dll = createGraph(col-1 > 0 || row-2 > 0)
-    node.ull = createGraph(col+1 > 0 || row-2 < 8)
-    node.uul = createGraph(col+2 > 0 || row-1 < 8)
+    // need to pass in array of coordinates
+    // here, test if 
+    node.uur = (position[0]+2 < 8 || position[1]+1 < 8) ? createGraph(position[0]+2, position[1]+1) : null
+    node.urr = (position[0]+1 < 8 || position[1]+2 < 8) ? createGraph(position[0]+1, position[1]+2) : null
+    node.drr = (position[0]-1 < 8 || position[1]+2 > 0) ? createGraph(position[0]-1, position[1]+2) : null
+    node.ddr = (position[0]-1 < 8 || position[1]+1 > 0) ? createGraph(position[0]-1, position[1]+1) : null
+    node.ddl = (position[0]-2 > 0 || position[1]-1 > 0) ? createGraph(position[0]-2, position[1]-1) : null
+    node.dll = (position[0]-1 > 0 || position[1]-2 > 0) ? createGraph(position[0]-1, position[1]-2) : null
+    node.ull = (position[0]+1 > 0 || position[1]-2 < 8) ? createGraph(position[0]+1, position[1]-2) : null
+    node.uul = (position[0]+2 > 0 || position[1]-1 < 8) ? createGraph(position[0]+2, position[1]-1) : null
 }
 
 createGraph();
