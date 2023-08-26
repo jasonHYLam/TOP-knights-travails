@@ -1,3 +1,127 @@
+// may need adjacency list, venerate the graph rather than the tree
+
+// what's wrong with me searching for what to do?
+// i don't know what questions to ask... i'm blindfolded
+
+class Graph {
+    constructor(numVertices) {
+        this.numVertices = numVertices;
+        this.AdjList = new Map();
+    }
+
+    addVertex(v) {
+        this.AdjList.set(v, [])
+    }
+
+    getVertex(col, row) {
+        for (let [key, value] of this.AdjList) {
+            if (col === key[0] && row === key[1]) {
+                return key
+            }
+        }
+    }
+
+    addEdge(v, w) {
+        this.AdjList.get(v).push(w);
+        this.AdjList.get(w).push(v);
+    }
+
+    printGraph() {
+        let getKeys = this.AdjList.keys();
+        for (let i of getKeys) {
+            let getValues = this.AdjList.get(i)
+            let conc = "";
+        }
+
+        for (let j of getValues) conc += j + " ";
+        console.log(i + " -> " + conc);
+    }
+}
+
+
+let newGraph = new Graph(64);
+// make a nested array of coordinates, using double for loop
+let vertices = []
+let sideLength = 8
+
+// it's easier to write code than to read code
+
+// this populates the vertices array
+// should 'give' 64 coordinates
+for (let i = 0; i < sideLength; i++) {
+    for (let j = 0; j < sideLength; j++) {
+        let coords = [i, j]
+        vertices.push(coords)
+    }
+}
+
+// add all these vertices, to inside the object
+// add edge, using something... for each , add thje 8 corresponding, if they exist
+
+for (v of vertices) {
+    newGraph.addVertex(v);
+}
+
+
+for (v of vertices) {
+    // try to add the possible moves for each vertex
+    // test each case, for if out of bounds
+    // if not out of bounds, add the edges
+    // get the vertex that corresponds to it first
+    if (v[0]+2 < 8 && v[1]+1 < 8) {
+        let move = newGraph.getVertex(v[0]+2,v[1]+1)
+        newGraph.addEdge(v, move)
+    } 
+
+    if (v[0]+1 < 8 && v[1]+2 < 8) {
+        let move = newGraph.getVertex(v[0]+1,v[1]+2)
+        newGraph.addEdge(v, move)
+    } 
+
+    if (v[0]-1 >=0 && v[1]+2 < 8) {
+        let move = newGraph.getVertex(v[0]-1,v[1]+2)
+        newGraph.addEdge(v, move)
+    } 
+
+    if (v[0]-2 >=0 && v[1]+1 < 8) {
+        let move = newGraph.getVertex(v[0]-2,v[1]+1)
+        newGraph.addEdge(v, move)
+    } 
+
+    if (v[0]-2 >=0 && v[1]-1 >=0) {
+        let move = newGraph.getVertex(v[0]-2,v[1]-1)
+        newGraph.addEdge(v, move)
+    } 
+
+    if (v[0]-1 >=0 && v[1]-2 >=0) {
+        let move = newGraph.getVertex(v[0]-1,v[1]-2)
+        newGraph.addEdge(v, move)
+    } 
+
+    if (v[0]+1 < 8 && v[1]-2 >=0) {
+        let move = newGraph.getVertex(v[0]+1,v[1]-2)
+        newGraph.addEdge(v, move)
+    } 
+
+    if (v[0]+2 < 8 && v[1]-1 >=0) {
+        let move = newGraph.getVertex(v[0]+2,v[1]-1)
+        newGraph.addEdge(v, move)
+    } 
+}
+
+    // if (v[0]+2 < 8 && v[1]+1 < 8) newGraph.addEdge(v, [v[0]+2, v[1]+1])
+    // if (v[0]+1 < 8 && v[1]+2 < 8) newGraph.addEdge(v, [v[0]+1, v[1]+2])
+    // if (v[0]-1 >=0 && v[1]+2 < 8) newGraph.addEdge(v, [v[0]-1, v[1]+2])
+    // if (v[0]-2 >=0 && v[1]+1 < 8) newGraph.addEdge(v, [v[0]-1, v[1]+1])
+
+    // if (v[0]-2 >=0 && v[1]-1 >=0) newGraph.addEdge(v, [v[0]-2, v[1]-1])
+    // if (v[0]-1 >=0 && v[1]-2 >=0) newGraph.addEdge(v, [v[0]-1, v[1]-2])
+    // if (v[0]+1 < 8 && v[1]-2 >=0) newGraph.addEdge(v, [v[0]+1, v[1]-2])
+    // if (v[0]+2 < 8 && v[1]-1 >=0) newGraph.addEdge(v, [v[0]+2, v[1]-1])
+
+
+console.log(newGraph)
+
 // this might be the wrong approach.
 // need to be thinking of graphs, trees, nodes, and recursion, rather than placing stuff in a grid
 // just need a starting point, within a graph?
@@ -46,40 +170,44 @@ class moveGenerator {
     }
 }
 
-const root = new Node(2,2)
+// const root = new Node(2,2)
 
-console.log(root)
+// console.log(root)
 
 const startingPosition = [2,2]
 
+// this doesn't work i think
 //position is an array of coordinates
 function createGraph(position = startingPosition) {
-    // how can i get reference to the very first root
+    const node = new Node(position[0], position[1])
 
-    // base case; if out of bounds, then return?
-
-
-    // like 
-    if (node.col < 0 || node.col > 7 || node.row < 0 || node.row > 7) return null
-
-    // const newNode = Node()
     // what do i do here
     // do i need a queue?
 
     // create 8 recursions
     // need to pass in array of coordinates
-    // here, test if 
-    node.uur = (position[0]+2 < 8 || position[1]+1 < 8) ? createGraph(position[0]+2, position[1]+1) : null
-    node.urr = (position[0]+1 < 8 || position[1]+2 < 8) ? createGraph(position[0]+1, position[1]+2) : null
-    node.drr = (position[0]-1 < 8 || position[1]+2 > 0) ? createGraph(position[0]-1, position[1]+2) : null
-    node.ddr = (position[0]-1 < 8 || position[1]+1 > 0) ? createGraph(position[0]-1, position[1]+1) : null
-    node.ddl = (position[0]-2 > 0 || position[1]-1 > 0) ? createGraph(position[0]-2, position[1]-1) : null
-    node.dll = (position[0]-1 > 0 || position[1]-2 > 0) ? createGraph(position[0]-1, position[1]-2) : null
-    node.ull = (position[0]+1 > 0 || position[1]-2 < 8) ? createGraph(position[0]+1, position[1]-2) : null
-    node.uul = (position[0]+2 > 0 || position[1]-1 < 8) ? createGraph(position[0]+2, position[1]-1) : null
+
+    // i may have to delete child nodes. but... the issue is i need all of these
+
+    // maybe can't do it this way
+    node.uur = (position[0]+2 < 8 && position[1]+1 < 8) ? createGraph([position[0]+2, position[1]+1]) : null
+    node.urr = (position[0]+1 < 8 && position[1]+2 < 8) ? createGraph([position[0]+1, position[1]+2]) : null
+    node.drr = (position[0]-1 >= 0 && position[1]+2 < 8) ? createGraph([position[0]-1, position[1]+2]) : null
+    node.ddr = (position[0]-2 > 0 && position[1]+1 < 8) ? createGraph([position[0]-1, position[1]+1]) : null
+
+    node.ddl = (position[0]-2 >= 0 && position[1]-1 >= 0) ? createGraph([position[0]-2, position[1]-1]) : null
+    node.dll = (position[0]-1 >= 0 && position[1]-2 >= 0) ? createGraph([position[0]-1, position[1]-2]) : null
+    node.ull = (position[0]+1 < 8 && position[1]-2 >= 0) ? createGraph([position[0]+1, position[1]-2]) : null
+    node.uul = (position[0]+2 < 8 && position[1]-1 >= 0) ? createGraph([position[0]+2, position[1]-1]) : null
+
+    return node
 }
 
-createGraph();
+// const graph = createGraph();
+// console.log(graph)
+
+
+
 
 // function startingPosition(col, row) {
 //     if (col < 0 || col > 7 || row < 0 || row > 7) return
