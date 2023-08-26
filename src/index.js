@@ -1,3 +1,4 @@
+//this really isn't working out for some reason... i'll either check out their way, or...
 // may need adjacency list, venerate the graph rather than the tree
 
 // what's wrong with me searching for what to do?
@@ -16,14 +17,15 @@ class Graph {
     getVertex(col, row) {
         for (let [key, value] of this.AdjList) {
             if (col === key[0] && row === key[1]) {
-                return key
+                // return key
+                return [key, value]
             }
         }
     }
 
     addEdge(v, w) {
         this.AdjList.get(v).push(w);
-        this.AdjList.get(w).push(v);
+        // this.AdjList.get(w).push(v);
     }
 
     printGraph() {
@@ -64,50 +66,122 @@ for (v of vertices) {
 
 
 for (v of vertices) {
-    // try to add the possible moves for each vertex
-    // test each case, for if out of bounds
-    // if not out of bounds, add the edges
-    // get the vertex that corresponds to it first
+    // try to add the (up to ) 8 possible moves for each vertex
+    // for each of the 8 moves, test if out of bounds
+    // if not out of bounds, get the resulting vertex of the move, then add it to the moves list
+
+    //urr
+    // console.log(v)
+
+    // why doesn't this work?
+    //there should be an item that is equal to [2,2]
     if (v[0]+2 < 8 && v[1]+1 < 8) {
-        let move = newGraph.getVertex(v[0]+2,v[1]+1)
+        let move = newGraph.getVertex(v[0]+2,v[1]+1)[0]
+        console.log(move)
+        // are there 2 edges added here?
         newGraph.addEdge(v, move)
     } 
+    // if (v[0]+2 < 8 && v[1]+1 < 8) {
+    //     let move = newGraph.getVertex(v[0]+2,v[1]+1)[0]
+    //     console.log(move)
+    //     newGraph.addEdge(v, move)
+    // } 
 
-    if (v[0]+1 < 8 && v[1]+2 < 8) {
-        let move = newGraph.getVertex(v[0]+1,v[1]+2)
-        newGraph.addEdge(v, move)
-    } 
+    //uur
+    // if (v[0]+1 < 8 && v[1]+2 < 8) {
+    //     let move = newGraph.getVertex(v[0]+1,v[1]+2)[0]
+    //     newGraph.addEdge(v, move)
+    // } 
 
-    if (v[0]-1 >=0 && v[1]+2 < 8) {
-        let move = newGraph.getVertex(v[0]-1,v[1]+2)
-        newGraph.addEdge(v, move)
-    } 
+    //uul
+    // if (v[0]-1 >=0 && v[1]+2 < 8) {
+    //     let move = newGraph.getVertex(v[0]-1,v[1]+2)[0]
+    //     newGraph.addEdge(v, move)
+    // } 
 
-    if (v[0]-2 >=0 && v[1]+1 < 8) {
-        let move = newGraph.getVertex(v[0]-2,v[1]+1)
-        newGraph.addEdge(v, move)
-    } 
+    //ull
+    // if (v[0]-2 >=0 && v[1]+1 < 8) {
+    //     let move = newGraph.getVertex(v[0]-2,v[1]+1)[0]
+    //     newGraph.addEdge(v, move)
+    // } 
 
-    if (v[0]-2 >=0 && v[1]-1 >=0) {
-        let move = newGraph.getVertex(v[0]-2,v[1]-1)
-        newGraph.addEdge(v, move)
-    } 
+    //dll
+    // if (v[0]-2 >=0 && v[1]-1 >=0) {
+    //     let move = newGraph.getVertex(v[0]-2,v[1]-1)[0]
+    //     newGraph.addEdge(v, move)
+    // } 
 
-    if (v[0]-1 >=0 && v[1]-2 >=0) {
-        let move = newGraph.getVertex(v[0]-1,v[1]-2)
-        newGraph.addEdge(v, move)
-    } 
+    //ddl
+    // if (v[0]-1 >=0 && v[1]-2 >=0) {
+    //     let move = newGraph.getVertex(v[0]-1,v[1]-2)[0]
+    //     newGraph.addEdge(v, move)
+    // } 
 
-    if (v[0]+1 < 8 && v[1]-2 >=0) {
-        let move = newGraph.getVertex(v[0]+1,v[1]-2)
-        newGraph.addEdge(v, move)
-    } 
+    //ddr
+    // if (v[0]+1 < 8 && v[1]-2 >=0) {
+    //     let move = newGraph.getVertex(v[0]+1,v[1]-2)[0]
+    //     newGraph.addEdge(v, move)
+    // } 
 
-    if (v[0]+2 < 8 && v[1]-1 >=0) {
-        let move = newGraph.getVertex(v[0]+2,v[1]-1)
-        newGraph.addEdge(v, move)
-    } 
+    //drr
+    // if (v[0]+2 < 8 && v[1]-1 >=0) {
+    //     let move = newGraph.getVertex(v[0]+2,v[1]-1)[0]
+    //     newGraph.addEdge(v, move)
+    // } 
 }
+
+
+
+console.log(newGraph)
+
+console.log(newGraph.getVertex(2,2))
+console.log(newGraph.getVertex(4,3))
+// the moves list has length 16, not 8
+// i get 0,1 and 4,3 instead of 3,4
+
+// TODO: now, traverse this bitch!
+// return when a certain position is reached. hmm, how do i build the counter and queue? what would it do?
+// they suggested level Order traversal. but how do i 'disregard' the 
+
+// start and end are arrays representing coordinates
+
+// add to an array for visited nodes
+// add to an array for the queue?
+function knightMoves(start, end) {
+
+    function recursiveTraversal(node, end, visited=[], queue=[]) {
+        // if the end position is reached, end 
+        if (node === end) {
+            return
+        } else {
+            // these represent the node and its moves
+            let [vertex, moves] = newGraph.getVertex(node[0], node[1])
+            visited.push(vertex)
+            queue.push(vertex)
+            // while (queue.length !== 0) {
+            //     for (v of moves) {
+            //         // get the corresponding vertex of the move, and add it to the queue 
+            //         let [vertex, moves] = newGraph.getVertex(v[0], v[1])
+            //         // and recursively go into each one... 
+
+            //     }
+            // }
+        }
+        console.log(visited)
+    }
+
+    let [firstVertex, firstMoves] = newGraph.getVertex(start[0], start[1])
+    return recursiveTraversal(firstVertex, end)
+}
+
+knightMoves([2,2], [6,6])
+
+
+// this might be the wrong approach.
+// need to be thinking of graphs, trees, nodes, and recursion, rather than placing stuff in a grid
+// just need a starting point, within a graph?
+// i need to understand recursion in a graph, first
+    // then, i need to think about the list of steps like a tree
 
     // if (v[0]+2 < 8 && v[1]+1 < 8) newGraph.addEdge(v, [v[0]+2, v[1]+1])
     // if (v[0]+1 < 8 && v[1]+2 < 8) newGraph.addEdge(v, [v[0]+1, v[1]+2])
@@ -118,15 +192,6 @@ for (v of vertices) {
     // if (v[0]-1 >=0 && v[1]-2 >=0) newGraph.addEdge(v, [v[0]-1, v[1]-2])
     // if (v[0]+1 < 8 && v[1]-2 >=0) newGraph.addEdge(v, [v[0]+1, v[1]-2])
     // if (v[0]+2 < 8 && v[1]-1 >=0) newGraph.addEdge(v, [v[0]+2, v[1]-1])
-
-
-console.log(newGraph)
-
-// this might be the wrong approach.
-// need to be thinking of graphs, trees, nodes, and recursion, rather than placing stuff in a grid
-// just need a starting point, within a graph?
-// i need to understand recursion in a graph, first
-    // then, i need to think about the list of steps like a tree
 
     //this should be like a tree
 
