@@ -10,8 +10,17 @@ function isArrayInArray(array, item) {
         return JSON.stringify(el) === JSON.stringify(item)
     })
     return result != null;
-
 }
+
+// required to construct tree for recursive traversal
+class Node {
+    constructor(col, row) {
+        this.coords = [col, row]
+        this.nextMoves = []
+    }
+}
+
+// contains each position and their moves
 class Graph {
     constructor(numVertices) {
         this.numVertices = numVertices;
@@ -132,53 +141,50 @@ for (v of vertices) {
 
 function knightMoves(start, end) {
 
-    // first step, get the first node and first moves
-    // let [firstVertex, firstMoves] = newGraph.getVertex(start[0],start[1])
+    function recursiveBuildTree(position, end, visited=[start], queue=[]) {
 
+        // something strange is why doesn't the very first position get added?
+        let recursivePath = `${JSON.stringify(position)}`;
+        // console.log(recursivePath)
+        let moves = newGraph.getVertex(position[0],position[1])[1]
+        // console.log(moves)
+        // first, determine if any of these moves are the end position.
+        // if so, move it to moves and return
+        for (v of moves) {
+            if (JSON.stringify(v) === JSON.stringify(end)) {
+                visited.push(end)
+                recursivePath += ` ${JSON.stringify(v)}`
+                console.log(recursivePath)
 
-    // put those into the recurisve recall's default argument
-    // function recursiveTraversal(node, end, visited=[vertex], queue=[vertex]) {
-
-    //so first call of recursiveTraversal should be the vertex above, but subsequently it should be something else
-    function recursiveTraversal(node, end, visited=[node], queue=[]) {
-        // console.log(node)
-        // console.log(visited)
-            // these represent the node and its moves
-            let moves = newGraph.getVertex(node[0], node[1])[1]
-            // visited is a array... can i access the shortest path from it?
-            // it just stores the nodes that are accessed. no classification or separation
-            //recursively build a tree maybe?
-            for (v of moves) {
-                // first, determine if any of these moves are the end position
-                if (JSON.stringify(v) === JSON.stringify(end)) {
-                    visited.push(end)
-                    console.log(visited)
-                    return
-                }
+                return recursivePath;
             }
-            // if the above doesn't happen, loop again and add all  
-            for (v of moves) {
-                // TEST IF IN VISITED!!!! VERY IMPORTANT
-                if (!isArrayInArray(visited, v)) {
-                    // get the corresponding vertex of the move, and add it to the queue 
-                    let moveVertex= newGraph.getVertex(v[0], v[1])[0]
-                    visited.push(moveVertex)
-                    queue.push(moveVertex)
-                }
+        }
+
+        // else, add all moves (not already made) to the move's property
+        for (v of moves) {
+            // test if the move has been made already (in visited array)
+            if (!isArrayInArray(visited, v)) {
+                // get the corresponding vertex of the move, and add it to the queue 
+                let moveVertex= newGraph.getVertex(v[0], v[1])[0]
+                visited.push(moveVertex)
+                queue.push(moveVertex)
             }
-            let nextVertex = queue[0]
-            console.log(nextVertex)
-            queue.shift();
-            // and recursively go into each one... 
-            recursiveTraversal(nextVertex, end, visited, queue)
-        // }
+        }
+
+        let nextVertex = queue[0];
+        queue.shift()
+        // never progresses past this point
+        recursivePath += recursiveBuildTree(nextVertex, end, visited, queue)
+
+        // i think this is NOW reached
+        console.log(recursivePath)
+        return recursiveBuildTree(nextVertex, end, visited, queue)
     }
 
-    let [firstVertex, firstMoves] = newGraph.getVertex(start[0], start[1])
-    // what may have gone wrong was this line here
-    return recursiveTraversal(firstVertex, end, [firstVertex])
+    return recursiveBuildTree(start, end)
 }
 
 
-knightMoves([0,2], [3,5])
+// knightMoves([0,2], [3,5])
+// knightMoves([0,0], [3,3])
 knightMoves([3,3], [0,0])
