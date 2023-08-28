@@ -1,4 +1,3 @@
-console.log('h')
 //this really isn't working out for some reason... i'll either check out their way, or...
 // may need adjacency list, venerate the graph rather than the tree
 
@@ -48,19 +47,10 @@ class Graph {
     }
 }
 
-
 let newGraph = new Graph(64);
-// make a nested array of coordinates, using double for loop
 let vertices = []
 let sideLength = 8
-
-// it's easier to write code than to read code
-
-// this populates the vertices array
-// should 'give' 64 coordinates
-
-
-
+// this populates the vertices array with coordinates of the chessboard
 for (let i = 0; i < sideLength; i++) {
     for (let j = 0; j < sideLength; j++) {
         let coords = [i, j]
@@ -68,32 +58,17 @@ for (let i = 0; i < sideLength; i++) {
     }
 }
 
-
-
 // add all these vertices, to inside the object
-// add edge, using something... for each , add thje 8 corresponding, if they exist
-
-
-
-
 for (v of vertices) {
     newGraph.addVertex(v);
 }
 
-    // try to add the (up to ) 8 possible moves for each vertex
-    // for each of the 8 moves, test if out of bounds
-    // if not out of bounds, get the resulting vertex of the move, then add it to the moves list
+// try to add the (up to ) 8 possible moves for each vertex
+// for each of the 8 moves, test if out of bounds
+// if not out of bounds, get the resulting vertex of the move, then add it to the moves list
 for (v of vertices) {
 
     // urr
-    // console.log(v)
-
-    // why doesn't this work?
-    // there should be an item that is equal to [2,2]
-    if (JSON.stringify(v) == JSON.stringify([2, 2])) {
-        console.log(v)
-    }
-
     if (v[0]+2 < 8 && v[1]+1 < 8) {
         let move = newGraph.getVertex(v[0]+2,v[1]+1)[0]
         newGraph.addEdge(v, move)
@@ -142,81 +117,68 @@ for (v of vertices) {
     } 
 }
 
-
-
-
-
-
-console.log(newGraph)
-
-console.log(newGraph.getVertex(2,2))
-console.log(newGraph.getVertex(4,3))
-
-
-
-
-
-
-
-
-// the moves list has length 16, not 8
-// i get 0,1 and 4,3 instead of 3,4
-
-// TODO: now, traverse this bitch!
 // return when a certain position is reached. hmm, how do i build the counter and queue? what would it do?
-// they suggested level Order traversal. but how do i 'disregard' the 
 
 // start and end are arrays representing coordinates
-
 // add to an array for visited nodes
 // add to an array for the queue?
 
-
+// i'm sure i don't need a queue to go until it is length 0..., just need to stop when node is found
+// is the queue flawed?
+// how do i add the correct move first, and if it isn't there, add all of the things; i think i've done that
+// but then how do i... only add the shortest path?
+// OH SHIT is this where level order comes in? do i need to build a tree from this? how do i build a tree from these moves?
+// okay, might 
 
 function knightMoves(start, end) {
 
-    function recursiveTraversal(node, end, visited=[], queue=[]) {
-        // if the end position is reached, end 
-        if (JSON.stringify(node) === JSON.stringify(end)) {
-            return
-        } else {
-            // these represent the node and its moves
-            let [vertex, moves] = newGraph.getVertex(node[0], node[1])
+    // first step, get the first node and first moves
+    // let [firstVertex, firstMoves] = newGraph.getVertex(start[0],start[1])
 
-            visited.push(vertex)
-            // surely i need to get the first of the queue at some point?
+
+    // put those into the recurisve recall's default argument
+    // function recursiveTraversal(node, end, visited=[vertex], queue=[vertex]) {
+
+    //so first call of recursiveTraversal should be the vertex above, but subsequently it should be something else
+    function recursiveTraversal(node, end, visited=[node], queue=[]) {
+        // console.log(node)
+        // console.log(visited)
+            // these represent the node and its moves
+            let moves = newGraph.getVertex(node[0], node[1])[1]
+            // visited is a array... can i access the shortest path from it?
+            // it just stores the nodes that are accessed. no classification or separation
+            //recursively build a tree maybe?
+            for (v of moves) {
+                // first, determine if any of these moves are the end position
+                if (JSON.stringify(v) === JSON.stringify(end)) {
+                    visited.push(end)
+                    console.log(visited)
+                    return
+                }
+            }
+            // if the above doesn't happen, loop again and add all  
             for (v of moves) {
                 // TEST IF IN VISITED!!!! VERY IMPORTANT
-                // if (v )
-                // get the corresponding vertex of the move, and add it to the queue 
-                let [nextVertex, nextMoves] = newGraph.getVertex(v[0], v[1])[0]
-                queue.push(nextVertex)
+                if (!isArrayInArray(visited, v)) {
+                    // get the corresponding vertex of the move, and add it to the queue 
+                    let moveVertex= newGraph.getVertex(v[0], v[1])[0]
+                    visited.push(moveVertex)
+                    queue.push(moveVertex)
+                }
             }
-            while (queue.length !== 0) {
-                let nextVertex = queue[0]
-                queue.shift();
-                // and recursively go into each one... 
-                //vertex is just the vertex, not the object containing vertex and nodes
-                recursiveTraversal(nextVertex, end, visited, queue)
-            }
-        }
-        console.log(visited)
+            let nextVertex = queue[0]
+            console.log(nextVertex)
+            queue.shift();
+            // and recursively go into each one... 
+            recursiveTraversal(nextVertex, end, visited, queue)
+        // }
     }
 
     let [firstVertex, firstMoves] = newGraph.getVertex(start[0], start[1])
-    // return recursiveTraversal(firstVertex, end)
+    // what may have gone wrong was this line here
+    return recursiveTraversal(firstVertex, end, [firstVertex])
 }
 
-// knightMoves([2, 2], [6, 6])
 
-
-console.log('j')
-
-let testArray = [[1,1], [2,2], [3,3]]
-if (testArray.includes[1,1]) {
-    console.log('yes')
-} else {
-    console.log('no')
-}
-
-isArrayInArray(testArray, [1,1])
+knightMoves([0,2], [3,5])
+knightMoves([3,3], [0,0])
