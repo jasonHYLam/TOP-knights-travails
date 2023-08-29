@@ -13,6 +13,8 @@ function isArrayInArray(array, item) {
 }
 
 // required to construct tree for recursive traversal
+
+// let's try to replace the coordinates with nodes
 class Node {
     constructor(col, row) {
         this.coords = [col, row]
@@ -62,15 +64,18 @@ let sideLength = 8
 // this populates the vertices array with coordinates of the chessboard
 for (let i = 0; i < sideLength; i++) {
     for (let j = 0; j < sideLength; j++) {
-        let coords = [i, j]
-        vertices.push(coords)
+        let newNode = new Node(i, j)
+        // let coords = [i, j]
+        // vertices.push(coords)
+        vertices.push(newNode)
     }
 }
 
+// let's not use Graph... 
 // add all these vertices, to inside the object
-for (v of vertices) {
-    newGraph.addVertex(v);
-}
+// for (v of vertices) {
+//     newGraph.addVertex(v);
+// }
 
 // try to add the (up to ) 8 possible moves for each vertex
 // for each of the 8 moves, test if out of bounds
@@ -78,51 +83,67 @@ for (v of vertices) {
 for (v of vertices) {
 
     // urr
-    if (v[0]+2 < 8 && v[1]+1 < 8) {
-        let move = newGraph.getVertex(v[0]+2,v[1]+1)[0]
-        newGraph.addEdge(v, move)
+    // if (v[0]+2 < 8 && v[1]+1 < 8) {
+    if (v.coords[0]+2 < 8 && v.coords[1]+1 < 8) {
+        // let move = newGraph.getVertex(v[0]+2,v[1]+1)[0]
+        v.nextMoves.push(v.coords[0]+2, v.coords[1]+1)
+        // newGraph.addEdge(v, move)
     } 
 
     //uur
-    if (v[0]+1 < 8 && v[1]+2 < 8) {
-        let move = newGraph.getVertex(v[0]+1,v[1]+2)[0]
-        newGraph.addEdge(v, move)
+    // if (v[0]+1 < 8 && v[1]+2 < 8) {
+    if (v.coords[0]+1 < 8 && v.coords[1]+2 < 8) {
+        // let move = newGraph.getVertex(v[0]+1,v[1]+2)[0]
+        // newGraph.addEdge(v, move)
+        v.nextMoves.push(v.coords[0]+1, v.coords[1]+2)
     } 
 
     //uul
-    if (v[0]-1 >=0 && v[1]+2 < 8) {
-        let move = newGraph.getVertex(v[0]-1,v[1]+2)[0]
-        newGraph.addEdge(v, move)
+    // if (v[0]-1 >=0 && v[1]+2 < 8) {
+    if (v.coords[0]-1 >=0 && v.coords[1]+2 < 8) {
+        // let move = newGraph.getVertex(v[0]-1,v[1]+2)[0]
+        // newGraph.addEdge(v, move)
+        v.nextMoves.push(v.coords[0]-1, v.coords[1]+2)
     } 
 
     //ull
-    if (v[0]-2 >=0 && v[1]+1 < 8) {
-        let move = newGraph.getVertex(v[0]-2,v[1]+1)[0]
-        newGraph.addEdge(v, move)
+    // if (v[0]-2 >=0 && v[1]+1 < 8) {
+    if (v.coords[0]-2 >=0 && v.coords[1]+1 < 8) {
+        // let move = newGraph.getVertex(v[0]-2,v[1]+1)[0]
+        // newGraph.addEdge(v, move)
+        v.nextMoves.push(v.coords[0]-2, v.coords[1]+1)
     } 
 
     //dll
-    if (v[0]-2 >=0 && v[1]-1 >=0) {
-        let move = newGraph.getVertex(v[0]-2,v[1]-1)[0]
-        newGraph.addEdge(v, move)
+    // if (v[0]-2 >=0 && v[1]-1 >=0) {
+    if (v.coords[0]-2 >=0 && v.coords[1]-1 >=0) {
+        // let move = newGraph.getVertex(v[0]-2,v[1]-1)[0]
+        // newGraph.addEdge(v, move)
+        v.nextMoves.push(v.coords[0]-2, v.coords[1]-1)
     } 
 
     //ddl
-    if (v[0]-1 >=0 && v[1]-2 >=0) {
-        let move = newGraph.getVertex(v[0]-1,v[1]-2)[0]
-        newGraph.addEdge(v, move)
+    // if (v[0]-1 >=0 && v[1]-2 >=0) {
+    if (v.coords[0]-1 >=0 && v.coords[1]-2 >=0) {
+        // let move = newGraph.getVertex(v[0]-1,v[1]-2)[0]
+        // newGraph.addEdge(v, move)
+        v.nextMoves.push(v.coords[0]-1, v.coords[1]-2)
     } 
 
     //ddr
-    if (v[0]+1 < 8 && v[1]-2 >=0) {
-        let move = newGraph.getVertex(v[0]+1,v[1]-2)[0]
-        newGraph.addEdge(v, move)
+    // if (v[0]+1 < 8 && v[1]-2 >=0) {
+    if (v.coords[0]+1 < 8 && v.coords[1]-2 >=0) {
+        // let move = newGraph.getVertex(v[0]+1,v[1]-2)[0]
+        // newGraph.addEdge(v, move)
+        v.nextMoves.push(v.coords[0]+1, v.coords[1]-2)
     } 
 
     //drr
-    if (v[0]+2 < 8 && v[1]-1 >=0) {
-        let move = newGraph.getVertex(v[0]+2,v[1]-1)[0]
-        newGraph.addEdge(v, move)
+    // if (v[0]+2 < 8 && v[1]-1 >=0) {
+    if (v.coords[0]+2 < 8 && v.coords[1]-1 >=0) {
+        // let move = newGraph.getVertex(v[0]+2,v[1]-1)[0]
+        // newGraph.addEdge(v, move)
+        v.nextMoves.push(v.coords[0]+2, v.coords[1]-1)
     } 
 }
 
@@ -142,49 +163,47 @@ for (v of vertices) {
 function knightMoves(start, end) {
 
     function recursiveBuildTree(position, end, visited=[start], queue=[]) {
-
-        // something strange is why doesn't the very first position get added?
-        let recursivePath = `${JSON.stringify(position)}`;
-        // console.log(recursivePath)
+        let shortestPath = `${JSON.stringify(position)}`;
+        // get neighbouring moves of current position; newGraph stores all positions and neighbouring moves for each position
         let moves = newGraph.getVertex(position[0],position[1])[1]
-        // console.log(moves)
         // first, determine if any of these moves are the end position.
-        // if so, move it to moves and return
         for (v of moves) {
+            // check if current move is the end position
             if (JSON.stringify(v) === JSON.stringify(end)) {
                 visited.push(end)
-                recursivePath += ` ${JSON.stringify(v)}`
-                console.log(recursivePath)
+                shortestPath += ` ${JSON.stringify(v)}`
+                console.log(shortestPath)
 
-                return recursivePath;
+                return shortestPath;
             }
         }
 
-        // else, add all moves (not already made) to the move's property
+        // else, add all moves (not already made) to queue
         for (v of moves) {
             // test if the move has been made already (in visited array)
             if (!isArrayInArray(visited, v)) {
-                // get the corresponding vertex of the move, and add it to the queue 
-                let moveVertex= newGraph.getVertex(v[0], v[1])[0]
-                visited.push(moveVertex)
-                queue.push(moveVertex)
+                visited.push(v)
+                queue.push(v)
             }
         }
 
+        // get the position at the start of the queue
         let nextVertex = queue[0];
         queue.shift()
-        // never progresses past this point
-        recursivePath += recursiveBuildTree(nextVertex, end, visited, queue)
-
-        // i think this is NOW reached
-        console.log(recursivePath)
-        return recursiveBuildTree(nextVertex, end, visited, queue)
+        // call again
+         let recursivePath = recursiveBuildTree(nextVertex, end, visited, queue)
+         // if path eventually contains the end position, add to the chain
+         if (recursivePath.includes(JSON.stringify(end))) {
+            shortestPath += recursivePath
+         }
+        // return shortestPath;
+        return '';
     }
 
     return recursiveBuildTree(start, end)
 }
 
-
-// knightMoves([0,2], [3,5])
-// knightMoves([0,0], [3,3])
+console.log(
 knightMoves([3,3], [0,0])
+// knightMoves([0,0], [3,3])
+)
