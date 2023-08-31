@@ -17,6 +17,7 @@ class Node {
         this.coords = [col, row]
         this.neighbouringMoves = []
         this.partOfChain = false;
+        this.previousPosition = null;
         if (col+2 < 8 && row+1 < 8) this.neighbouringMoves.push([col+2, row+1])
         if (col+1 < 8 && row+2 < 8) this.neighbouringMoves.push([col+1, row+2])
         if (col-1 >=0 && row+2 < 8) this.neighbouringMoves.push([col-1, row+2])
@@ -25,7 +26,6 @@ class Node {
         if (col-1 >=0 && row-2 >=0) this.neighbouringMoves.push([col-1, row-2])
         if (col+1 < 8 && row-2 >=0) this.neighbouringMoves.push([col+1, row-2])
         if (col+2 < 8 && row-1 >=0) this.neighbouringMoves.push([col+2, row-1])
-
     }
 }
 
@@ -47,78 +47,104 @@ function getNodeFromList(position, list) {
 }
 
 function knightMoves(start, end) {
-    // function recursiveBuildTree(position, end, visited=[start], queue=[], accessed=[start]) {
-    function recursiveBuildTree(position, end, queue=[], accessed=[start]) {
-        let node = getNodeFromList(position, vertices)
-        let shortestPath = `${JSON.stringify(position)}`;
+    //may need to introduce a 'future node'
+    function recursiveBuildTree(position, end, queue=[], accessed=[], previousPosition) {
+        let currentNode = getNodeFromList(position, vertices)
+        previousPosition = currentNode.previousPosition
+        // console.log(previousPosition)
+        // console.log(position)
+        console.log('current node')
+        console.log(currentNode.coords)
+        console.log(position)
+        console.log(currentNode)
+
+
+        let recursivePath = '';
         accessed.push(position)
 
         // check if current move leads to the end position
-        for (v of node.neighbouringMoves) {
+        for (v of currentNode.neighbouringMoves) {
             if (JSON.stringify(v) === JSON.stringify(end)) {
                 // do some stuff required to check if path can be added
-                // i'm not sure i even need the visited array
-                // visited.push(end)
+                accessed.push(end)
                 // i'm not convinced that this does what i expect... these don't have that property. i need to get the node
                 // so here, i'm making the chain true
-                node.partOfChain = true;
+                currentNode.partOfChain = true;
                 // start building the chain
-                shortestPath += ` ${JSON.stringify(v)}`
-                return shortestPath;
+                recursivePath = `${JSON.stringify(position)}${JSON.stringify(v)}`
+                // i iwll need to return recrusivePath and previousPosition
+                // return recursivePath;
+                return [recursivePath, previousPosition];
             }
         }
 
-        // else, add all moves (not already made) to queue and visited 
-        for (v of node.neighbouringMoves) {
-            // test if the move has been made already (in visited array)
-            // if (!isArrayInArray(visited, v)) {
-            //     visited.push(v)
+        // else, add all moves (not already made) to queue and accessed array
+        console.log('neighbours')
+        for (v of currentNode.neighbouringMoves) {
+            // console.log(v)
+            let neighbourNode = getNodeFromList(v, vertices)
+            neighbourNode.previousPosition = position;
+            console.log(neighbourNode)
+            // test if the move has been made already (in accessed array); if not, don't add to the queue
+            if (!isArrayInArray(accessed, v)) {
+                // this cuts down the amount of moves, but it still isn't correct
+                accessed.push(v)
                 queue.push(v)
-            // }
+            }
         }
+        console.log(' ')
 
         // get the position at the start of the queue
         let nextNeighbour = queue[0];
         queue.shift()
-        // store reference to future return values
-        let recursivePath = '';
-        //recursive path will first return the end position and the previous node. it will also change the previous node
-        //  recursivePath += recursiveBuildTree(nextNeighbour, end, visited, queue, accessed)
-         recursivePath += recursiveBuildTree(nextNeighbour, end, queue, accessed)
+         // i am gonna try returnign the previousPosition
+         // i will have to modify the recursivePath line a little, so i will need to return an array of string and position
+         let futureChain = null;
+         let prev = null;
+         [futureChain, prev] = recursiveBuildTree(nextNeighbour, end, queue, accessed, previousPosition)
+        //  console.log(futureChain)
+         recursivePath += futureChain
+         previousPosition = prev
 
-         // this is the end game
+        //  console.log(previousPosition)
 
-         // now, recursive path is used to add to chain
-        if (recursivePath.includes(JSON.stringify(end))) {
-            // check the neighbouring moves once more
-            for (v of node.neighbouringMoves) {
-                
-                let checkNodeIsPartOfChain = getNodeFromList(v,vertices)
-
-                // this should find the previous value; what do i want to do with it? 
-                // if (isArrayInArray(visited, v) && v.partOfChain === true) {
-                
-                // maybe i need to get the nodes.... like node = getNodeFromList(v)
-                // if 
-
-                //does this still hold?
-                if (isArrayInArray(accessed, v)
-                 && checkNodeIsPartOfChain.partOfChain === true
-                )
-                 {
-                    node.partOfChain = true;
-                    recursivePath = JSON.stringify(position) + recursivePath;
-                    return recursivePath;
-                }
-            }
-            return '' + recursivePath;
-        }
-    }
+         if (previousPosition === position) {
+            let previousNode = getNodeFromList(previousPosition, vertices)
+            console.log(previousNode)
+            previousPosition = previousNode.previousPosition
+            //what do i put in here?
+            // maybe the recursivePath thingie, and nothing else, like so:
+            recursivePath = JSON.stringify(position) + recursivePath;
+            let test = [recursivePath, previousPosition]
+            console.log(test)
+            return [recursivePath, previousPosition];
+         }
+            // for (v of currentNode.neighbouringMoves) {
+            //     let neighbourNode = getNodeFromList(v,vertices)
+            //     if (neighbourNode.partOfChain === true)
+            //      {
+            //         currentNode.partOfChain = true;
+            //         recursivePath = JSON.stringify(position) + recursivePath;
+            //         return recursivePath;
+            //     }
+            // }
+            // i just want previousPosition to stay as 1,3 ...  is that so much to ask
+            // i might need to return it? i'm not 
+            // console.log(recursivePath)
+            let test = [''+recursivePath, previousPosition]
+            // console.log(test)
+            return ['' + recursivePath, previousPosition];
+}
     return recursiveBuildTree(start, end)
 }
 
 console.log(
 // knightMoves([3,3], [0,0])
-// knightMoves([4,3], [0,0])
-knightMoves([0,0], [3,3])
+knightMoves([4,3], [0,0])
+// ,
+
+// knightMoves([0,0], [5,3])
+// knightMoves([4,3], [7,7])
+// knightMoves([7,7], [0,0])
+// knightMoves([0,0], [3,3])
 )
