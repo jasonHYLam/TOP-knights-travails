@@ -1,5 +1,6 @@
 # TOP-knights-travails
 
+This is a task to find and print the shortest path of moves made by a knight on a chess board, between two positions.
 
 ## What I've Learned
 
