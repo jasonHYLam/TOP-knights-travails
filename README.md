@@ -1,6 +1,6 @@
 # TOP-knights-travails
 
-This is a task to find and print the shortest path of moves made by a knight on a chess board, between two positions.
+This is a task to find and print the shortest path of moves made by a knight on a chess board, between two positions. This was very difficult and could be broken down into a level order graph traversal problem.
 
 ## What I've Learned
 
