@@ -1,17 +1,3 @@
-//this really isn't working out for some reason... i'll either check out their way, or...
-// may need adjacency list, venerate the graph rather than the tree
-
-// what's wrong with me searching for what to do?
-// i don't know what questions to ask... i'm blindfolded
-
-// tests if an array is in another array. required, as coordinates are in arrays.
-function isArrayInArray(array, item) {
-    let result = array.find((el)=> {
-        return JSON.stringify(el) === JSON.stringify(item)
-    })
-    return result != null;
-}
-
 class Node {
     constructor(col, row) {
         this.coords = [col, row]
@@ -28,14 +14,22 @@ class Node {
     }
 }
 
+// this populates the vertices array with coordinates of the chessboard
 let vertices = []
 let sideLength = 8
-// this populates the vertices array with coordinates of the chessboard
 for (let i = 0; i < sideLength; i++) {
     for (let j = 0; j < sideLength; j++) {
         let newNode = new Node(i, j)
         vertices.push(newNode)
     }
+}
+
+// tests if an array is in another array. required, as coordinates are in arrays.
+function isArrayInArray(array, item) {
+    let result = array.find((el)=> {
+        return JSON.stringify(el) === JSON.stringify(item)
+    })
+    return result != null;
 }
 
 function getNodeFromList(position, list) {
@@ -46,7 +40,6 @@ function getNodeFromList(position, list) {
 }
 
 function knightMoves(start, end) {
-    // function recursiveBuildTree(position, end, queue=[], accessed=[], previousPosition=null) {
     function recursiveBuildTree(position, end, queue=[], accessed=[]) {
         let currentNode = getNodeFromList(position, vertices)
 
